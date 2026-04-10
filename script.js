@@ -68,7 +68,7 @@ const rankingData = [
   { pos: 6, equipo: 'Operación Roja',    tiempo: '01:22:01', puntos: 1650, estado: 'Tiempo agotado'    },
 ];
 
-const posClasses = { 1: 'gold', 2: 'silver', 3: 'bronze' };
+const posClasses = { 1: 'cyan-accent', 2: 'cyan-dim', 3: 'cyan-dim' };
 
 function renderRanking() {
   const tbody = document.getElementById('ranking-body');
@@ -80,8 +80,8 @@ function renderRanking() {
     const posClass = posClasses[row.pos] || '';
     const medal = row.pos === 1 ? '🥇' : row.pos === 2 ? '🥈' : row.pos === 3 ? '🥉' : '';
     const estadoColor = row.estado.includes('agotado')
-      ? 'color:var(--red-stamp)'
-      : 'color:var(--gold-dark)';
+      ? 'color:var(--red-alert)'
+      : 'color:var(--cyan)';
 
     tr.innerHTML = `
       <td><span class="rank-pos ${posClass}">${medal || row.pos}</span></td>
@@ -114,7 +114,7 @@ form.addEventListener('submit', async (e) => {
   }
 
   if (!isValidEmail(email)) {
-    form.email.style.borderColor = 'var(--red-stamp)';
+    form.email.style.borderColor = 'var(--red-alert)';
     setTimeout(() => form.email.style.borderColor = '', 2000);
     return;
   }
@@ -201,7 +201,7 @@ const navObserver = new IntersectionObserver(
         const id = entry.target.getAttribute('id');
         document.querySelectorAll('.nav-links a').forEach(a => {
           a.style.color = a.getAttribute('href') === `#${id}`
-            ? 'var(--gold)'
+            ? 'var(--cyan)'
             : '';
         });
       }
