@@ -96,7 +96,8 @@ function renderRanking() {
 
 renderRanking();
 
-// ── 5. FORMULARIO DE CONTACTO ──────────────────────────────
+import { db } from "../firebase.js";
+import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const form    = document.getElementById('contacto-form');
 const success = document.getElementById('form-success');
@@ -120,18 +121,33 @@ form.addEventListener('submit', async (e) => {
   }
 
   const btn = document.getElementById('btn-enviar');
-  btn.textContent = 'Enviando…';
+  const originalText = btn.textContent;
+  btn.textContent = 'TRANSMITIENDO...';
   btn.disabled = true;
 
-  // Simulación de envío (reemplazar con Firebase o fetch real)
-  await delay(1800);
+  try {
+    // GUARDAR EN FIREBASE
+    await addDoc(collection(db, "contactos"), {
+      nombre,
+      email,
+      mensaje,
+      visto: false,
+      timestamp: serverTimestamp()
+    });
 
-  form.reset();
-  success.style.display = 'block';
-  btn.style.display = 'none';
-
-  // Preparado para Firebase:
-  // await sendToFirebase({ nombre, email, tipo: form.tipo.value, mensaje });
+    form.reset();
+    form.style.display = 'none';
+    success.style.display = 'block';
+  } catch (error) {
+    console.error("Error al enviar:", error);
+    btn.textContent = 'ERROR EN TRANSMISIÓN';
+    btn.style.background = 'var(--red-alert)';
+    setTimeout(() => {
+        btn.textContent = originalText;
+        btn.disabled = false;
+        btn.style.background = '';
+    }, 3000);
+  }
 });
 
 function isValidEmail(email) {

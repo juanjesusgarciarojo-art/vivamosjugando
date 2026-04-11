@@ -16,7 +16,7 @@
       <li><a href="#que-es">El Sistema</a></li>
       <li><a href="#como-funciona">Protocolo</a></li>
       <li><a href="#archivos">Datos</a></li>
-      <li><a href="#ranking">Leaderboard</a></li>
+      <li><a href="#ranking">Leyendas</a></li>
       <li><a href="#contacto">Conexión</a></li>
     </ul>
     <button class="hamburger" id="hamburger" aria-label="Menú">
@@ -204,18 +204,22 @@
         <form id="contacto-form">
           <div class="form-group">
             <label>AGENTE_ALIAS</label>
-            <input type="text" id="nombre" required>
+            <input type="text" name="nombre" id="nombre" required>
           </div>
           <div class="form-group">
             <label>CANAL_RESPUESTA (EMAIL)</label>
-            <input type="email" id="email" required>
+            <input type="email" name="email" id="email" required>
           </div>
           <div class="form-group">
             <label>TRANSMISIÓN_DATOS</label>
-            <textarea id="mensaje" required></textarea>
+            <textarea name="mensaje" id="mensaje" required></textarea>
           </div>
-          <button type="submit" class="btn-submit">ENVIAR PAQUETE_</button>
+          <button type="submit" id="btn-enviar" class="btn-submit">ENVIAR PAQUETE_</button>
         </form>
+        <div id="form-success" style="display: none; text-align: center; padding: 20px;">
+          <h3 style="color: var(--cyan); margin-bottom: 10px;">TRANSMISIÓN COMPLETADA</h3>
+          <p style="color: var(--text-dim);">El Mando Central ha recibido tu señal. Mantente a la escucha.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -231,6 +235,6 @@
     <p class="foot-copy">© 2025 VIVAMOS JUGANDO // SECURE NETWORK</p>
   </footer>
 
-  <script src="script.js"></script>
+  <script type="module" src="script.js"></script>
 </body>
 </html>
