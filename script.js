@@ -94,9 +94,21 @@ function renderRanking() {
   });
 }
 
-renderRanking();
+// Inicialización de Firebase vía objeto Global (Compat) para entorno local
+const firebaseConfig = {
+  apiKey: "AIzaSyDC93yT8bBGZvzz6TTjngY7rTX-vgT-rTw",
+  authDomain: "el-reto-de-tu-vida.firebaseapp.com",
+  projectId: "el-reto-de-tu-vida",
+  storageBucket: "el-reto-de-tu-vida.firebasestorage.app",
+  messagingSenderId: "436879361667",
+  appId: "1:436879361667:web:94dffea44b14787d057db6"
+};
 
-// Firebase integration deferred to prevent CORS blocks locally.
+// Evitar la múltiple inicialización
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+const dbDesc = firebase.firestore();
 
 const form    = document.getElementById('contacto-form');
 const success = document.getElementById('form-success');
@@ -124,12 +136,32 @@ form.addEventListener('submit', async (e) => {
   btn.textContent = 'TRANSMITIENDO...';
   btn.disabled = true;
 
-  // Simulación de envío temporal hasta que la web se despliegue en un servidor real
-  await delay(1800);
+  try {
+    console.log("Intentando conectar con La Orden...");
+    // GUARDAR EN FIREBASE
+    await dbDesc.collection("contactos").add({
+      nombre: nombre,
+      email: email,
+      mensaje: mensaje,
+      visto: false,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    });
 
-  form.reset();
-  form.style.display = 'none';
-  success.style.display = 'block';
+    console.log("Transmisión exitosa.");
+    form.reset();
+    form.style.display = 'none';
+    success.style.display = 'block';
+  } catch (error) {
+    console.error("Error crítico de transmisión:", error);
+    alert("ERROR DE CONEXIÓN: " + error.message);
+    btn.textContent = 'FALLO EN ENLACE';
+    btn.style.background = 'var(--red-alert)';
+    setTimeout(() => {
+        btn.textContent = originalText;
+        btn.disabled = false;
+        btn.style.background = '';
+    }, 3000);
+  }
 });
 
 function isValidEmail(email) {
