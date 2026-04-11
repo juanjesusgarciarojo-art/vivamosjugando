@@ -96,8 +96,7 @@ function renderRanking() {
 
 renderRanking();
 
-import { db } from "../firebase.js";
-import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+// Firebase integration deferred to prevent CORS blocks locally.
 
 const form    = document.getElementById('contacto-form');
 const success = document.getElementById('form-success');
@@ -125,29 +124,12 @@ form.addEventListener('submit', async (e) => {
   btn.textContent = 'TRANSMITIENDO...';
   btn.disabled = true;
 
-  try {
-    // GUARDAR EN FIREBASE
-    await addDoc(collection(db, "contactos"), {
-      nombre,
-      email,
-      mensaje,
-      visto: false,
-      timestamp: serverTimestamp()
-    });
+  // Simulación de envío temporal hasta que la web se despliegue en un servidor real
+  await delay(1800);
 
-    form.reset();
-    form.style.display = 'none';
-    success.style.display = 'block';
-  } catch (error) {
-    console.error("Error al enviar:", error);
-    btn.textContent = 'ERROR EN TRANSMISIÓN';
-    btn.style.background = 'var(--red-alert)';
-    setTimeout(() => {
-        btn.textContent = originalText;
-        btn.disabled = false;
-        btn.style.background = '';
-    }, 3000);
-  }
+  form.reset();
+  form.style.display = 'none';
+  success.style.display = 'block';
 });
 
 function isValidEmail(email) {
